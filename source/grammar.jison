@@ -3,55 +3,84 @@
 
 %%
 \s+                             // Ignore whitespace
-<<EOF>>                         return "END";
+\n                              return "NEWLINE";
 "("                             return "(";
 ")"                             return ")";
 "{"                             return "{";
 "}"                             return "}";
 "="                             return "=";
 
+"is"                            return "IS";
+"not"                           return "NOT";
+
 [0-9]+                          return "NUMBER";
 \"[^\"]*\"                      return "TEXT";
 [A-Za-z\-]+                     return "IDENTIFIER";
+"true"                          return "TRUE";
+"false"                         return "FALSE";
 
 /lex
 
 /* Operators */
+%left "."
+%left "NOT"
+%left "IS"
+%left ","
 
-%start code
+%start Root
 
 /* Language grammar */
 %%
 
-code
-    : statements END
+Root
+    : /* Empty */
+        %{
+            console.log("No code");
+            return [];
+        }%
+    | Expressions
+        %{
+            console.dir(JSON.stringify($1));
+            return $1;
+        }%
     ;
 
-statements
-    : statement statements
-    | statement
+Expressions
+    : Expression
+        { $$ = [$1]; }
+    | Expressions NEWLINE Expression
+        { $$ = $1.concat($3); }
     ;
 
-statement
-    : literal
-    | declarations
+Expression
+    : Literal
+    | Call
+    | Operator
+    | Assign
+    | "(" Expression ")"
     ;
 
-declarations
-    : identifier "(" ")" "{" statements "}"
-        { console.log("[FUNCTION DECLARATION]"); }
-    | identifier "=" literal
-        { console.log("[VARIABLE DECLARATION]"); }
-    ;
-
-identifier
-    : IDENTIFIER
-        { console.log("[INDENTIFIER, " + yytext + "]"); }
-    ;
-
-literal
+Literal
     : NUMBER
-        { console.log("[NUMBER, " + Number(yytext) + "]"); }
+        { $$ = { type: "NUMBER", value: Number(yytext) }; }
     | TEXT
-        { console.log("[TEXT, " + yytext.slice(1,-1) + "]"); }
+        { $$ = { type: "TEXT", value: yytext.slice(1, -1) }; }
+    | TRUE
+        { $$ = { type: "TRUE", value: true }; }
+    | FALSE
+        { $$ = { type: "FALSE", value: false }; }
+    ;
+
+Call
+    : IDENTIFIER "(" Arguments ")"
+        { $$ = { type: "CALL",  value: $1, arguments: $3 }; }
+    ;
+
+Arguments
+    :
+        /* No arguments */
+    | Expression
+        { $$ = [$1]; }
+    | Arguments "," Expression
+        { $$ = $1.concat($2); }
     ;
