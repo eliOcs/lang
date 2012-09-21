@@ -1,0 +1,4 @@
+variable = "lemon"
+if (variable is "lemon") {
+    print("true!")
+}

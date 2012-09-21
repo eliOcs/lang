@@ -3,7 +3,6 @@
 
 %%
 \s+                             // Ignore whitespace
-\n                              return "NEWLINE";
 "("                             return "(";
 ")"                             return ")";
 "{"                             return "{";
@@ -12,6 +11,7 @@
 
 "is"                            return "IS";
 "not"                           return "NOT";
+"if"                            return "IF";
 
 [0-9]+                          return "NUMBER";
 \"[^\"]*\"                      return "TEXT";
@@ -48,7 +48,7 @@ Root
 Expressions
     : Expression
         { $$ = [$1]; }
-    | Expressions NEWLINE Expression
+    | Expressions Expression
         { $$ = $1.concat($3); }
     ;
 
@@ -57,6 +57,7 @@ Expression
     | Call
     | Operator
     | Assign
+    | If
     | "(" Expression ")"
     ;
 
@@ -83,4 +84,16 @@ Arguments
         { $$ = [$1]; }
     | Arguments "," Expression
         { $$ = $1.concat($2); }
+    ;
+
+Operator
+    : Expression
+
+Assign
+    : IDENTIFIER "=" Expression
+        { $$ = { type: "SET_LOCAL_VALUE", identifier: $1, value: $3 }; }
+    ;
+
+If
+    : IF Expression "{" Expressions "}"
     ;

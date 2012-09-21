@@ -9,3 +9,10 @@ echo
 echo "Nodes"
 node "output/grammar.js" "test/hello-world.code"
 echo
+
+echo "If"
+echo "Code"
+cat "test/if.code"
+echo
+echo "Nodes"
+node "output/grammar.js" "test/if.code"
