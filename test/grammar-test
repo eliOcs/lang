@@ -1,6 +1,7 @@
-123
-345 678
-"Vamonos con este ejemplo loco"
-"otra" ""
-identificador
-otro-identificador
+prueba-funcion() {
+    "asdf"
+    123
+}
+
+lemon = "lemon"
+lemon = 234

@@ -4,10 +4,14 @@
 %%
 \s+                             // Ignore whitespace
 <<EOF>>                         return "END";
+"("                             return "(";
+")"                             return ")";
+"{"                             return "{";
+"}"                             return "}";
+"="                             return "=";
 
 [0-9]+                          return "NUMBER";
 \"[^\"]*\"                      return "TEXT";
-
 [A-Za-z\-]+                     return "IDENTIFIER";
 
 /lex
@@ -30,7 +34,18 @@ statements
 
 statement
     : literal
-    | IDENTIFIER
+    | declarations
+    ;
+
+declarations
+    : identifier "(" ")" "{" statements "}"
+        { console.log("[FUNCTION DECLARATION]"); }
+    | identifier "=" literal
+        { console.log("[VARIABLE DECLARATION]"); }
+    ;
+
+identifier
+    : IDENTIFIER
         { console.log("[INDENTIFIER, " + yytext + "]"); }
     ;
 
