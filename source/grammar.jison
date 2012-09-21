@@ -2,35 +2,41 @@
 %lex
 
 %%
-\s+             // Ignore whitespace
-<<EOF>>         return 'END';
+\s+                             // Ignore whitespace
+<<EOF>>                         return "END";
 
-/* Literals */
-[0-9]+          return "NUMBER";
+[0-9]+                          return "NUMBER";
+\"[^\"]*\"                      return "TEXT";
+
+[A-Za-z\-]+                     return "IDENTIFIER";
 
 /lex
 
 /* Operators */
 
-%start SourceCode
+%start code
 
 /* Language grammar */
 %%
 
-SourceCode
-    : expressions END
+code
+    : statements END
     ;
 
-expressions
-    : expression expressions
-    | expression
+statements
+    : statement statements
+    | statement
     ;
 
-expression
+statement
     : literal
+    | IDENTIFIER
+        { console.log("[INDENTIFIER, " + yytext + "]"); }
     ;
 
 literal
     : NUMBER
-        { console.log("NUMBER - " + Number(yytext)); }
+        { console.log("[NUMBER, " + Number(yytext) + "]"); }
+    | TEXT
+        { console.log("[TEXT, " + yytext.slice(1,-1) + "]"); }
     ;
