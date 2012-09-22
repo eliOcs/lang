@@ -8,6 +8,7 @@
 "{"                             return "{";
 "}"                             return "}";
 "="                             return "=";
+","                             return ",";
 
 "is"                            return "IS";
 "not"                           return "NOT";
@@ -22,10 +23,11 @@
 /lex
 
 /* Operators */
-%left "."
-%left "NOT"
-%left "IS"
-%left ","
+%left       "."
+%right      "NOT"
+%left       "IS"
+%right      "="
+%left       ","
 
 %start Root
 
@@ -49,27 +51,32 @@ Expressions
     : Expression
         { $$ = [$1]; }
     | Expressions Expression
-        { $$ = $1.concat($3); }
+        { $$ = $1.concat($2); }
     ;
 
 Expression
     : Literal
     | Call
+    | Variable
     | Operator
     | Assign
     | If
-    | "(" Expression ")"
     ;
 
 Literal
     : NUMBER
-        { $$ = { type: "NUMBER", value: Number(yytext) }; }
+        { $$ = { type: "NUMBER", value: Number($1) }; }
     | TEXT
-        { $$ = { type: "TEXT", value: yytext.slice(1, -1) }; }
+        { $$ = { type: "TEXT", value: $1.slice(1, -1) }; }
     | TRUE
         { $$ = { type: "TRUE", value: true }; }
     | FALSE
         { $$ = { type: "FALSE", value: false }; }
+    ;
+
+Variable
+    : IDENTIFIER
+        { $$ = { type: "GET_LOCAL_VALUE", identifier: $1 }; }
     ;
 
 Call
@@ -80,14 +87,17 @@ Call
 Arguments
     :
         /* No arguments */
+        { $$ = []; }
     | Expression
         { $$ = [$1]; }
     | Arguments "," Expression
-        { $$ = $1.concat($2); }
+        { $$ = $1.concat($3); }
     ;
 
 Operator
-    : Expression
+    : Expression IS Expression
+        { $$ = {type: "EQUALITY", leftOperand: $1, rightOperand: $3 }; }
+    ;
 
 Assign
     : IDENTIFIER "=" Expression
@@ -95,5 +105,6 @@ Assign
     ;
 
 If
-    : IF Expression "{" Expressions "}"
+    : IF "(" Expression ")" "{" Expressions "}"
+        { $$ = { type: "IF", condition: $3, value: $6 }; }
     ;

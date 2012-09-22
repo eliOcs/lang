@@ -1,0 +1,1 @@
+[{"type":"SET_LOCAL_VALUE","identifier":"variable","value":{"type":"TEXT","value":"lemon"}},{"type":"IF","condition":{"type":"EQUALITY","leftOperand":{"type":"GET_LOCAL_VALUE","identifier":"variable"},"rightOperand":{"type":"TEXT","value":"lemon"}},"value":[{"type":"CALL","value":"print","arguments":[{"type":"TEXT","value":"true!"}]}]}]
