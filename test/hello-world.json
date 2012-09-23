@@ -1,1 +1,1 @@
-[{"type":"CALL","value":"print","arguments":[{"type":"TEXT","value":"hello world"}]}]
+[{"type":"CALL","identifier":"print","arguments":[{"type":"TEXT","value":"hello world"}]}]

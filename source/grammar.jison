@@ -36,15 +36,9 @@
 
 Root
     : /* Empty */
-        %{
-            console.log("No code");
-            return [];
-        }%
+        { return []; }
     | Expressions
-        %{
-            console.dir(JSON.stringify($1));
-            return $1;
-        }%
+        { return $1; }
     ;
 
 Expressions
@@ -81,7 +75,7 @@ Variable
 
 Call
     : IDENTIFIER "(" Arguments ")"
-        { $$ = { type: "CALL",  value: $1, arguments: $3 }; }
+        { $$ = { type: "CALL",  identifier: $1, arguments: $3 }; }
     ;
 
 Arguments
@@ -96,7 +90,7 @@ Arguments
 
 Operator
     : Expression IS Expression
-        { $$ = {type: "EQUALITY", leftOperand: $1, rightOperand: $3 }; }
+        { $$ = {type: "CALL", identifier: $2, arguments: [$1, $3] }; }
     ;
 
 Assign
@@ -106,5 +100,5 @@ Assign
 
 If
     : IF "(" Expression ")" "{" Expressions "}"
-        { $$ = { type: "IF", condition: $3, value: $6 }; }
+        { $$ = { type: "IF", condition: $3, body: $6 }; }
     ;
