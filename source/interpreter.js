@@ -71,12 +71,3 @@ interpreter.evaluate = function (code) {
         console.log("-> " + interpreter.evaluator.evaluate(node, context));
     });
 };
-
-interpreter.main = function (args) {
-    var fs = require("fs"),
-        code = fs.readFileSync(args[2], "utf8");
-
-    interpreter.evaluate(code);
-};
-
-interpreter.main(process.argv);
