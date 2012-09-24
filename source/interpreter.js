@@ -65,9 +65,12 @@ interpreter.evaluator = (function () {
 }());
 
 interpreter.evaluate = function (code) {
-    var nodes = parser.parse(code);
+    var nodes = parser.parse(code),
+        result;
 
     nodes.forEach(function (node) {
-        console.log("-> " + interpreter.evaluator.evaluate(node, context));
+        result = interpreter.evaluator.evaluate(node, context);
     });
+
+    return result;
 };
