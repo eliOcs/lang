@@ -28,7 +28,7 @@ interpreter.evaluator = (function () {
         },
 
         TEXT: function (node, context) {
-            return runtime.newText(node);
+            return runtime.createTextObject(node);
         },
 
         CALL: function (node, context) {

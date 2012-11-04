@@ -3,7 +3,7 @@
 
 var runtime = exports;
 
-runtime.newText = function (node) {
+runtime.createTextObject = function (node) {
     return node.value;
 };
 
@@ -15,7 +15,22 @@ runtime.global.methods = {
 
     is: function (args) {
         return args[0] === args[1];
-    }
+    },
 
+    add: function (args) {
+        return args[0] + args[1];
+    },
+
+    subtract: function (args) {
+        return args[0] - args[1];
+    },
+
+    multiply: function (args) {
+        return args[0] * args[1];
+    },
+
+    divide: function (args) {
+        return args[0] / args[1];
+    }
 };
 

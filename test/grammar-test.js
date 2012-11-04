@@ -17,7 +17,7 @@ files.
             tree = parser.parse(code);
 
         console.log("Parsing '" + name + "'");
-        //console.log(JSON.stringify(tree));
+        console.log(JSON.stringify(tree));
         assert.deepEqual(tree, require("./" + name + ".json"));
         console.log("\tOK!");
     });
