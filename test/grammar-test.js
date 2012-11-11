@@ -5,7 +5,7 @@ var fs = require("fs"),
     files = fs.readdirSync("test"),
     assert = require("assert"),
     codeFilePattern = /([A-Za-z\-]+)\.code/,
-    parser = require("../output/grammar.js").parser;
+    parser = require("../source/parser");
 
 files.
     // Filter code files

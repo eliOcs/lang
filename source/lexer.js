@@ -1,11 +1,15 @@
 /*jslint node: true */
 "use strict";
 
+/*jslint regexp: true */
 var lexer = exports,
     regex = {
         identifier: /^[A-Za-z\-]+/,
-        text: /^\"(.*)\"/
+        text: /^\"(.*)\"/   // TODO: Improve string regex
+                            //  1. Allow a way of escaping '"'
+                            //  2. Don't use . in regex
     };
+/*jslint regex: false */
 
 function identifiers(tokens, code) {
 
@@ -48,7 +52,7 @@ function texts(tokens, code) {
     if (match) {
         value = match[1];
         tokens.push(["TEXT", value]);
-        return value.length;
+        return match[0].length;
     } else {
         return 0;
     }
@@ -66,10 +70,13 @@ function symbols(tokens, code) {
         tokens.push([symbol, symbol]);
         break;
 
+    case "\n":
+        tokens.push(["EOL", ""]);
+        break;
+
     // Ignored symbols
     default:
         break;
-
     }
 
     return 1;

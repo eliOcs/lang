@@ -4,9 +4,10 @@
 
 var fs = require("fs"),
     lexer = require("../source/lexer"),
+    parser = require("../source/parser"),
     filename = process.argv[2],
     code = fs.readFileSync(filename, "utf8"),
-    tokens = lexer.tokenize(code);
+    ast = parser.parse(lexer.tokenize(code));
 
 console.log(code);
-console.dir(JSON.stringify(tokens));
+console.log(JSON.stringify(ast));
