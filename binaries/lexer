@@ -8,5 +8,4 @@ var fs = require("fs"),
     code = fs.readFileSync(filename, "utf8"),
     tokens = lexer.tokenize(code);
 
-console.log(code);
-console.dir(JSON.stringify(tokens));
+console.log(JSON.stringify(tokens));

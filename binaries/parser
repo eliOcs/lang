@@ -9,5 +9,4 @@ var fs = require("fs"),
     code = fs.readFileSync(filename, "utf8"),
     ast = parser.parse(lexer.tokenize(code));
 
-console.log(code);
 console.log(JSON.stringify(ast));
