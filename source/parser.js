@@ -103,7 +103,7 @@ parser.lexer = {
     lex: function () {
         var token = this.tokens[this.pos];
         this.yytext = token[1];
-        this.yylineno = token[2];
+        this.yylineno = token[2] - 1;   // Convert to zero base count
         this.pos += 1;
         return token[0];
     },

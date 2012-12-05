@@ -88,7 +88,7 @@ lexer.tokenize = function (code) {
 
     var context = {
             tokens: [],
-            line: 0
+            line: 1
         },
         current = 0,
         advance,

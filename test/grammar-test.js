@@ -4,7 +4,7 @@
 var fs = require("fs"),
     files = fs.readdirSync("test"),
     assert = require("assert"),
-    codeFilePattern = /([A-Za-z\-]+)\.code/,
+    codeFilePattern = /(\w+)\.code/,
     parser = require("../source/parser");
 
 files.
