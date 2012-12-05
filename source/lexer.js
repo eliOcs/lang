@@ -67,6 +67,9 @@ function symbols(context, code) {
     // Accepted symbols
     case "(":
     case ")":
+    case "{":
+    case "}":
+    case "=":
         context.tokens.push([symbol, symbol, context.line]);
         break;
 
