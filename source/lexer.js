@@ -11,7 +11,7 @@ var lexer = exports,
     };
 /*jslint regex: false */
 
-function identifiers(tokens, code) {
+function identifiers(context, code) {
 
     var match = regex.identifier.exec(code),
         name,
@@ -35,7 +35,7 @@ function identifiers(tokens, code) {
         }
 
         // Add token
-        tokens.push([name, value]);
+        context.tokens.push([name, value, context.line]);
 
         return value.length;
     } else {
@@ -44,14 +44,14 @@ function identifiers(tokens, code) {
 
 }
 
-function texts(tokens, code) {
+function texts(context, code) {
 
     var match = regex.text.exec(code),
         value;
 
     if (match) {
         value = match[1];
-        tokens.push(["TEXT", value]);
+        context.tokens.push(["TEXT", value, context.line]);
         return match[0].length;
     } else {
         return 0;
@@ -59,7 +59,7 @@ function texts(tokens, code) {
 
 }
 
-function symbols(tokens, code) {
+function symbols(context, code) {
     var symbol = code.slice(0, 1);
 
     switch (symbol) {
@@ -67,11 +67,12 @@ function symbols(tokens, code) {
     // Accepted symbols
     case "(":
     case ")":
-        tokens.push([symbol, symbol]);
+        context.tokens.push([symbol, symbol, context.line]);
         break;
 
     case "\n":
-        tokens.push(["EOL", ""]);
+        context.tokens.push(["EOL", "", context.line]);
+        context.line += 1;
         break;
 
     // Ignored symbols
@@ -85,21 +86,23 @@ function symbols(tokens, code) {
 
 lexer.tokenize = function (code) {
 
-    var tokens = [],
+    var context = {
+            tokens: [],
+            line: 0
+        },
         current = 0,
         advance,
         chunk;
 
     for (chunk = code; chunk.length > 0; chunk = code.slice(current)) {
-        advance = identifiers(tokens, chunk) ||
-            texts(tokens, chunk) ||
-            symbols(tokens, chunk);
+        advance = identifiers(context, chunk) || texts(context, chunk) ||
+            symbols(context, chunk);
         current += advance;
     }
 
-    tokens.push(["EOF", ""]);
+    context.tokens.push(["EOF", "", context.line]);
 
-    return tokens;
+    return context.tokens;
 
 };
 
