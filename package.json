@@ -1,0 +1,29 @@
+{
+    "name": "lang",
+    "version": "0.0.1",
+    "description": "This repository holds the implementations of a programming language. I have yet to name this programming language.",
+    "main": "index.js",
+    "directories": {
+        "test": "test"
+    },
+    "dependencies": {
+        "jison": "0.3.12"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/eliOcs/lang.git"
+    },
+    "bin": {
+        "lexer": "./binaries/lexer",
+        "parser": "./binaries/parser"
+    },
+    "keywords": [
+        "lang"
+    ],
+    "author": "Elio Capella Sánchez",
+    "license": "MIT"
+}
