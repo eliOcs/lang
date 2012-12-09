@@ -2,6 +2,11 @@
     - function.code
     - function.code test
 - Parser
+    - if.code
+    - if.code test
+    - function.code
+    - function.code test
+- Interpreter
     - hello-world.code
     - hello-world.code test
     - if.code

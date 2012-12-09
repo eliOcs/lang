@@ -24,7 +24,7 @@ var grammar = {
 
         "Expressions": [
             ["Expression", "$$ = [$1];"],
-            ["Expressions TERMINATOR Expression", "$$ = $1.concat($2);"]
+            ["Expressions EOL Expression", "$$ = $1.concat($2);"]
         ],
 
         "Expression": [

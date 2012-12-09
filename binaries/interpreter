@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+/*jslint node: true */
+"use strict";
+
+var fs = require("fs"),
+    lexer = require("../source/lexer"),
+    parser = require("../source/parser"),
+    interpreter = require("../source/interpreter"),
+    filename = process.argv[2],
+    code = fs.readFileSync(filename, "utf8");
+
+interpreter.evaluate(parser.parse(lexer.tokenize(code)));
