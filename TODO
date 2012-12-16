@@ -7,7 +7,6 @@
     - function.code test
 - Interpreter
     - hello-world.code test
-    - if.code
     - if.code test
     - function.code
     - function.code test

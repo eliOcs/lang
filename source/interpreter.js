@@ -16,7 +16,7 @@ function evaluate(node) {
 nodeEvalutators = {
 
     IF: function (node, context) {
-        if (interpreter.evaluator.evaluate(node.condition, context) === true) {
+        if (evaluate(node.condition, context) === true) {
             node.body.forEach(function (node) {
                 evaluate(node, context);
             });
