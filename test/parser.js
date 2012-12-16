@@ -32,7 +32,47 @@ vows.describe("Parser").addBatch({
 
     "Hello world": parse("hello-world.code", [{"type": "CALL",
         "identifier": "print", "arguments": [{"type": "TEXT",
-        "value": "hello world"}]}])
+        "value": "hello world"}]}]),
+
+    "If": parse(
+        "if.code",
+       [{
+          "type":"SET_LOCAL_VALUE",
+          "identifier":"variable",
+          "value":{
+             "type":"TEXT",
+             "value":"lemon"
+          }
+       },
+       {
+          "type":"IF",
+          "condition":{
+             "type":"CALL",
+             "identifier":"is",
+             "arguments":[
+                {
+                   "type":"GET_LOCAL_VALUE",
+                   "identifier":"variable"
+                },
+                {
+                   "type":"TEXT",
+                   "value":"lemon"
+                }
+             ]
+          },
+          "body":[
+             {
+                "type":"CALL",
+                "identifier":"print",
+                "arguments":[
+                   {
+                      "type":"TEXT",
+                      "value":"true!"
+                   }
+                ]
+             }
+          ]
+       }])
 
 }).exportTo(module);
 
