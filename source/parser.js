@@ -24,7 +24,8 @@ var grammar = {
 
         "Expressions": [
             ["Expression", "$$ = [$1];"],
-            ["Expressions EOL Expression", "$$ = $1.concat($2);"]
+            ["Expressions EOL Expression", "$$ = $1.concat($3);"],
+            ["Expressions EOL", "$$ = $1;"]
         ],
 
         "Expression": [
@@ -79,13 +80,20 @@ var grammar = {
         ],
 
         "If": [
-            ["IF ( Expression ) { Expressions }",
-                "$$ = { type: \"IF\", condition: $3, body: $6 };"]
+            ["IF ( Expression ) Block",
+                "$$ = { type: \"IF\", condition: $3, body: $5 };"]
         ],
 
         "Function": [
-            ["( ArgumentsDefinition ) { Expressions }",
-                "$$ = { type: \"FUNCTION\", arguments: $2, body: $5 };"]
+            ["( ArgumentsDefinition ) Block",
+                "$$ = { type: \"FUNCTION\", arguments: $2, body: $4 };"]
+        ],
+
+        "Block": [
+            ["{ Expressions }",
+                "$$ = $2;"],
+            ["{ EOL Expressions }",
+                "$$ = $3;"]
         ],
 
         "ArgumentsDefinition": [

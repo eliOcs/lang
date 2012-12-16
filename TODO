@@ -2,7 +2,6 @@
     - function.code
     - function.code test
 - Parser
-    - if.code
     - if.code test
     - function.code
     - function.code test
