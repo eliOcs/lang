@@ -4,21 +4,27 @@
 var runtime = require("./runtime"),
     context = require("./context"),
     interpreter = exports,
-    nodes;
+    nodeEvalutators;
 
-nodes = {
+/**
+ * Evaluates a node.
+ */
+function evaluate(node) {
+    return nodeEvalutators[node.type](node, context);
+}
+
+nodeEvalutators = {
 
     IF: function (node, context) {
         if (interpreter.evaluator.evaluate(node.condition, context) === true) {
             node.body.forEach(function (node) {
-                interpreter.evaluator.evaluate(node, context);
+                evaluate(node, context);
             });
         }
     },
 
     SET_LOCAL_VALUE: function (node, context) {
-        context.locals[node.identifier] = interpreter.evaluator.
-            evaluate(node.value, context);
+        context.locals[node.identifier] = evaluate(node.value, context);
     },
 
     GET_LOCAL_VALUE: function (node, context) {
@@ -40,7 +46,7 @@ nodes = {
 
         // Evaluate arguments
         evaluatedArgs = node["arguments"].map(function (argument) {
-            return interpreter.evaluator.evaluate(argument, context);
+            return evaluate(argument, context);
         });
 
         return method(evaluatedArgs);
@@ -49,14 +55,12 @@ nodes = {
 };
 
 /**
- * Evaluates a node.
+ * Evaluate a set of nodes.
  */
-function evaluate(node) {
-    console.log("Evaluating");
-    console.log("\t" + JSON.stringify(node));
-    return nodes[node.type](node, context);
-}
-
 interpreter.evaluate = function (nodes) {
-    return nodes.reduce(evaluate);
+    var result;
+    nodes.forEach(function (node) {
+        result = evaluate(node);
+    });
+    return result;
 };
