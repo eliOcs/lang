@@ -5,9 +5,10 @@
 var lexer = exports,
     regex = {
         identifier: /^[A-Za-z\-]+/,
-        text: /^\"(.*)\"/   // TODO: Improve string regex
+        text: /^\"(.*)\"/,  // TODO: Improve string regex
                             //  1. Allow a way of escaping '"'
                             //  2. Don't use . in regex
+        number: /^(\-?\d)+/   // TODO: Improve to allow decimals
     };
 /*jslint regex: false */
 
@@ -59,6 +60,21 @@ function texts(context, code) {
 
 }
 
+function numbers(context, code) {
+
+    var match = regex.number.exec(code),
+        value;
+
+    if (match) {
+        value = match[1];
+        context.tokens.push(["NUMBER", value, context.line]);
+        return match[0].length;
+    } else {
+        return 0;
+    }
+
+}
+
 function symbols(context, code) {
     var symbol = code.slice(0, 1);
 
@@ -69,7 +85,13 @@ function symbols(context, code) {
     case ")":
     case "{":
     case "}":
+    case ",":
     case "=":
+    // Mathematical operators
+    case "+":
+    case "-":
+    case "*":
+    case "/":
         context.tokens.push([symbol, symbol, context.line]);
         break;
 
@@ -99,7 +121,7 @@ lexer.tokenize = function (code) {
 
     for (chunk = code; chunk.length > 0; chunk = code.slice(current)) {
         advance = identifiers(context, chunk) || texts(context, chunk) ||
-            symbols(context, chunk);
+            numbers(context, chunk) || symbols(context, chunk);
         current += advance;
     }
 

@@ -1,11 +1,32 @@
 - Lexer
-    - function.code
     - function.code test
 - Parser
-    - function.code
     - function.code test
 - Interpreter
     - hello-world.code test
     - if.code test
     - function.code
     - function.code test
+
+Ideas
+
+functions
+    - named parameters (map)
+    - list parameters
+    - default values
+    - optional parameters
+
+packages
+    - Go style
+    - public/private - with the export keyword
+
+scope
+    - GO style
+
+syntax
+    - integrate event handling system (on/off/trigger)
+
+macros
+
+Documentation
+    - Python, Clojure, Elixir type
