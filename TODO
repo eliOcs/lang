@@ -5,7 +5,6 @@
 - Interpreter
     - hello-world.code test
     - if.code test
-    - function.code
     - function.code test
 
 Ideas

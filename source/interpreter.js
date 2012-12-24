@@ -2,18 +2,17 @@
 "use strict";
 
 var runtime = require("./runtime"),
-    context = require("./context"),
     interpreter = exports,
-    nodeEvalutators;
+    evaluators;
 
 /**
  * Evaluates a node.
  */
-function evaluate(node) {
-    return nodeEvalutators[node.type](node, context);
+function evaluate(node, context) {
+    return evaluators[node.type](node, context);
 }
 
-nodeEvalutators = {
+evaluators = {
 
     IF: function (node, context) {
         if (evaluate(node.condition, context) === true) {
@@ -24,15 +23,38 @@ nodeEvalutators = {
     },
 
     SET_LOCAL_VALUE: function (node, context) {
-        context.locals[node.identifier] = evaluate(node.value, context);
+        context[node.identifier] = evaluate(node.value, context);
     },
 
     GET_LOCAL_VALUE: function (node, context) {
-        return context.locals[node.identifier];
+        return context[node.identifier];
     },
 
     TEXT: function (node, context) {
         return runtime.createTextObject(node);
+    },
+
+    NUMBER: function (node, context) {
+        return runtime.createNumberObject(node);
+    },
+
+    FUNCTION: function (node, context) {
+        return function () {
+            var args = Array.prototype.slice.call(arguments, 0),
+                result;
+
+            // Add arguments to context
+            args.forEach(function (argument, index) {
+                context[node["arguments"][index]] = argument;
+            });
+
+            // Evaluate body
+            node.body.forEach(function (node) {
+                result = evaluate(node, context);
+            });
+
+            return result;
+        };
     },
 
     CALL: function (node, context) {
@@ -40,8 +62,29 @@ nodeEvalutators = {
             method;
 
         // Lookup method
+        method = context[node.identifier];
 
-        // If method can't be found look for global scope
+        if (!method) {
+            method = runtime.global.methods[node.identifier];
+        }
+
+        // Can't find method
+        if (!method) {
+            throw new Error(node.identifier + " has not been defined.");
+        }
+
+        // Evaluate arguments
+        evaluatedArgs = node["arguments"].map(function (argument) {
+            return evaluate(argument, context);
+        });
+
+        return method.apply(null, evaluatedArgs);
+    },
+
+    RUNTIME: function (node, context) {
+        var evaluatedArgs,
+            method;
+
         method = runtime.global.methods[node.identifier];
 
         // Evaluate arguments
@@ -49,7 +92,7 @@ nodeEvalutators = {
             return evaluate(argument, context);
         });
 
-        return method(evaluatedArgs);
+        return method.apply(null, evaluatedArgs);
     }
 
 };
@@ -58,9 +101,9 @@ nodeEvalutators = {
  * Evaluate a set of nodes.
  */
 interpreter.evaluate = function (nodes) {
-    var result;
+    var result, context = {};
     nodes.forEach(function (node) {
-        result = evaluate(node);
+        result = evaluate(node, context);
     });
     return result;
 };

@@ -62,15 +62,15 @@ var grammar = {
         ],
 
         "Operator": [
-            ["Expression IS Expression", "$$ = {type: \"CALL\", " +
+            ["Expression IS Expression", "$$ = {type: \"RUNTIME\", " +
                 "identifier: $2, arguments: [$1, $3] };"],
-            ["Expression * Expression", "$$ = {type: \"CALL\", " +
+            ["Expression * Expression", "$$ = {type: \"RUNTIME\", " +
                 "identifier: \"multiply\", arguments: [$1, $3] };"],
-            ["Expression / Expression", "$$ = {type: \"CALL\", " +
+            ["Expression / Expression", "$$ = {type: \"RUNTIME\", " +
                 "identifier: \"divide\", arguments: [$1, $3] };"],
-            ["Expression + Expression", "$$ = {type: \"CALL\", " +
+            ["Expression + Expression", "$$ = {type: \"RUNTIME\", " +
                 "identifier: \"add\", arguments: [$1, $3] };"],
-            ["Expression - Expression", "$$ = {type: \"CALL\", " +
+            ["Expression - Expression", "$$ = {type: \"RUNTIME\", " +
                 "identifier: \"subtract\", arguments: [$1, $3] };"]
         ],
 

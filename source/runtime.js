@@ -7,30 +7,36 @@ runtime.createTextObject = function (node) {
     return node.value;
 };
 
+runtime.createNumberObject = function (node) {
+    return Number(node.value);
+};
+
 runtime.global = {};
 runtime.global.methods = {
-    print: function (args) {
-        return console.log(args[0]);
+
+    print: function (a) {
+        return console.log(a);
     },
 
-    is: function (args) {
-        return args[0] === args[1];
+    is: function (a, b) {
+        return a === b;
     },
 
-    add: function (args) {
-        return args[0] + args[1];
+    add: function (a, b) {
+        return a + b;
     },
 
-    subtract: function (args) {
-        return args[0] - args[1];
+    subtract: function (a, b) {
+        return a - b;
     },
 
-    multiply: function (args) {
-        return args[0] * args[1];
+    multiply: function (a, b) {
+        return a * b;
     },
 
-    divide: function (args) {
-        return args[0] / args[1];
+    divide: function (a, b) {
+        return a / b;
     }
+
 };
 
