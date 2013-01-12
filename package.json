@@ -21,7 +21,8 @@
     },
     "bin": {
         "lexer": "./binaries/lexer",
-        "parser": "./binaries/parser"
+        "parser": "./binaries/parser",
+        "interpreter": "./binaries/parser"
     },
     "keywords": [
         "lang"
