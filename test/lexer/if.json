@@ -1,0 +1,1 @@
+[["IDENTIFIER","variable",1],["=","=",1],["TEXT","lemon",1],["EOL","",1],["EOL","",2],["IF","if",3],["(","(",3],["IDENTIFIER","variable",3],["IS","is",3],["TEXT","lemon",3],[")",")",3],["{","{",3],["EOL","",3],["IDENTIFIER","print",4],["(","(",4],["TEXT","true!",4],[")",")",4],["EOL","",4],["}","}",5],["EOF","",5]]
