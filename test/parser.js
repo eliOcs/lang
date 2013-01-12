@@ -2,19 +2,26 @@
 "use strict";
 
 var vows = require("vows"),
-    assert = require("assert");
+    assert = require("assert"),
+    fs = require("fs"),
+    path = require("path"),
+    lexer = require("../source/lexer"),
+    parser = require("../source/parser"),
+    tests = {};
 
-function parse(file, expected) {
-    var lexer = require("../source/lexer"),
-        parser = require("../source/parser"),
-        fs = require("fs"),
-        path = require("path");
+/**
+ * Parse the code and compare the resulting AST with the expected one.
+ */
+function parse(name) {
+
+    var code = path.resolve("./test/code", name + ".code"),
+        expected = path.resolve("./test/parser", name + ".json");
 
     return {
 
         topic: function () {
             var callback = this.callback;
-            fs.readFile(path.resolve("./test/code", file), "utf8",
+            fs.readFile(code, "utf8",
                 function (err, code) {
                     callback(err, parser.parse(lexer.tokenize(code)));
                 });
@@ -22,58 +29,19 @@ function parse(file, expected) {
 
         "Generates correct ast": function (err, nodes) {
             assert.ifError(err);
-            assert.deepEqual(nodes, expected);
+            assert.deepEqual(nodes, require(expected));
         }
 
     };
+
 }
 
-vows.describe("Parser").addBatch({
+// Generate test for each code file
+fs.readdirSync("./test/code").forEach(function (file) {
+    var name = path.basename(file, ".code");
+    tests[name] = parse(name);
+});
 
-    "Hello world": parse("hello-world.code", [{"type": "CALL",
-        "identifier": "print", "arguments": [{"type": "TEXT",
-        "value": "hello world"}]}]),
-
-    "If": parse(
-        "if.code",
-       [{
-          "type":"SET_LOCAL_VALUE",
-          "identifier":"variable",
-          "value":{
-             "type":"TEXT",
-             "value":"lemon"
-          }
-       },
-       {
-          "type":"IF",
-          "condition":{
-             "type":"CALL",
-             "identifier":"is",
-             "arguments":[
-                {
-                   "type":"GET_LOCAL_VALUE",
-                   "identifier":"variable"
-                },
-                {
-                   "type":"TEXT",
-                   "value":"lemon"
-                }
-             ]
-          },
-          "body":[
-             {
-                "type":"CALL",
-                "identifier":"print",
-                "arguments":[
-                   {
-                      "type":"TEXT",
-                      "value":"true!"
-                   }
-                ]
-             }
-          ]
-       }])
-
-}).exportTo(module);
+vows.describe("Parser").addBatch(tests).exportTo(module);
 
 
