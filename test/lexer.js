@@ -2,18 +2,22 @@
 "use strict";
 
 var vows = require("vows"),
-    assert = require("assert");
+    assert = require("assert"),
+    lexer = require("../source/lexer"),
+    fs = require("fs"),
+    path = require("path"),
+    tests = {};
 
-function lex(file, expected) {
-    var lexer = require("../source/lexer"),
-        fs = require("fs"),
-        path = require("path");
+function lex(name) {
+
+    var code = path.resolve("./test/code", name + ".code"),
+        expected = path.resolve("./test/lexer", name + ".json");
 
     return {
 
         topic: function () {
             var callback = this.callback;
-            fs.readFile(path.resolve("./test/code", file), "utf8",
+            fs.readFile(code, "utf8",
                 function (err, code) {
                     callback(err, lexer.tokenize(code));
                 });
@@ -21,25 +25,18 @@ function lex(file, expected) {
 
         "Generates correct tokens": function (err, tokens) {
             assert.ifError(err);
-            assert.deepEqual(tokens, expected);
+            assert.deepEqual(tokens, require(expected));
         }
 
     };
 }
 
-vows.describe("Lexer").addBatch({
+// Generate test for each code file
+fs.readdirSync("./test/code").forEach(function (file) {
+    var name = path.basename(file, ".code");
+    tests[name] = lex(name);
+});
 
-    "Hello world": lex("hello-world.code", [["IDENTIFIER", "print", 1],
-        ["(", "(", 1], ["TEXT", "hello world", 1], [")", ")", 1],
-        ["EOF", "", 1]]),
-
-    "If": lex("if.code", [["IDENTIFIER", "variable", 1], ["=", "=", 1],
-        ["TEXT", "lemon", 1], ["EOL", "", 1], ["EOL", "", 2], ["IF", "if", 3],
-        ["(", "(", 3], ["IDENTIFIER", "variable", 3], ["IS", "is", 3],
-        ["TEXT", "lemon", 3], [")", ")", 3], ["{", "{", 3], ["EOL", "", 3],
-        ["IDENTIFIER", "print", 4], ["(", "(", 4], ["TEXT", "true!", 4],
-        [")", ")", 4], ["EOL", "", 4], ["}", "}", 5], ["EOF", "", 5]])
-
-}).exportTo(module);
+vows.describe("Lexer").addBatch(tests).exportTo(module);
 
 
