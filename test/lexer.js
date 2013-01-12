@@ -8,6 +8,9 @@ var vows = require("vows"),
     path = require("path"),
     tests = {};
 
+/**
+ * Tokenize the code and compare the results to the expected.
+ */
 function lex(name) {
 
     var code = path.resolve("./test/code", name + ".code"),
