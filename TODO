@@ -1,7 +1,5 @@
 - Lexer
-    - function.code test
 - Parser
-    - function.code test
 - Interpreter
     - hello-world.code test
     - if.code test
