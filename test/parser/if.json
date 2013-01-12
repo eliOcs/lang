@@ -1,0 +1,1 @@
+[{"type":"SET_LOCAL_VALUE","identifier":"variable","value":{"type":"TEXT","value":"lemon"}},{"type":"IF","condition":{"type":"RUNTIME","identifier":"is","arguments":[{"type":"GET_LOCAL_VALUE","identifier":"variable"},{"type":"TEXT","value":"lemon"}]},"body":[{"type":"CALL","identifier":"print","arguments":[{"type":"TEXT","value":"true!"}]}]}]
