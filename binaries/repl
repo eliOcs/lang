@@ -4,20 +4,29 @@
 "use strict";
 
 var readline = require("readline"),
+    colors = require("colors"),
     rl = readline.createInterface(process.stdin, process.stdout),
     lexer = require("../source/lexer"),
     parser = require("../source/parser"),
-    interpreter = require("../source/interpreter"),
-    colors = require("cli-color").bgBlack;
+    interpreter = require("../source/interpreter");
 
 rl.setPrompt("> ");
 rl.prompt();
 
 rl.on("line", function (line) {
-    console.log(colors.blackBright(interpreter.evaluate(parser.parse(lexer.
-        tokenize(line)))));
+    var result = String(interpreter.evaluate(
+        parser.parse(
+            lexer.tokenize(
+                line,
+                { verbose: true }
+            ),
+            { verbose: true }
+        )
+    ));
+
+    console.log(result.grey);
     rl.prompt();
 }).on("close", function () {
-    console.log(colors.yellow("Bye bye."));
+    console.log("Bye bye.".yellow);
     process.exit(0);
 });

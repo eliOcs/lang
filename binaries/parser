@@ -8,6 +8,4 @@ var fs = require("fs"),
     parser = require("../source/parser"),
     filename = process.argv[2],
     code = fs.readFileSync(filename, "utf8"),
-    ast = parser.parse(lexer.tokenize(code));
-
-console.log(JSON.stringify(ast));
+    ast = parser.parse(lexer.tokenize(code), { verbose: true });

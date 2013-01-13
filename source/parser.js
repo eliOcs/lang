@@ -105,7 +105,8 @@ var grammar = {
 };
 
 var jison = require("jison"),
-    parser = new jison.Parser(grammar);
+    parser = new jison.Parser(grammar),
+    parse = parser.parse;
 
 parser.lexer = {
     lex: function () {
@@ -122,6 +123,16 @@ parser.lexer = {
     upcomingInput: function () {
         return "";
     }
+};
+
+parser.parse = function (tokens, options) {
+
+    var result = parse.apply(this, arguments);
+
+    options = options || {};
+    if (options.verbose) { console.log(JSON.stringify(result, null, 4)); }
+
+    return result;
 };
 
 module.exports = parser;

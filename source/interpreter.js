@@ -9,7 +9,10 @@ var runtime = require("./runtime"),
  * Evaluates a node.
  */
 function evaluate(node, context) {
-    return evaluators[node.type](node, context);
+    //console.log("Evaluating " + node.type);
+    var result = evaluators[node.type](node, context);
+    //console.log("Result " + result);
+    return result;
 }
 
 evaluators = {

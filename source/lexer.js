@@ -109,7 +109,22 @@ function symbols(context, code) {
 
 }
 
-lexer.tokenize = function (code) {
+/**
+ * Returns the string representation for the token list.
+ */
+function stringify(tokens) {
+
+    var result = "[\n";
+    tokens.forEach(function (token) {
+        result += "    " + JSON.stringify(token) + "\n";
+    });
+    result += "]";
+
+    return result;
+
+}
+
+lexer.tokenize = function (code, options) {
 
     var context = {
             tokens: [],
@@ -126,6 +141,11 @@ lexer.tokenize = function (code) {
     }
 
     context.tokens.push(["EOF", "", context.line]);
+
+    options = options || {};
+    if (options.verbose) {
+        console.log(stringify(context.tokens));
+    }
 
     return context.tokens;
 
