@@ -1,16 +1,21 @@
+#!/usr/bin/env node
+
 /*jslint node: true */
 "use strict";
 
 var readline = require("readline"),
     rl = readline.createInterface(process.stdin, process.stdout),
-    interpreter = require("./interpreter"),
+    lexer = require("../source/lexer"),
+    parser = require("../source/parser"),
+    interpreter = require("../source/interpreter"),
     colors = require("cli-color").bgBlack;
 
 rl.setPrompt("> ");
 rl.prompt();
 
 rl.on("line", function (line) {
-    console.log(colors.blackBright(interpreter.evaluate(line)));
+    console.log(colors.blackBright(interpreter.evaluate(parser.parse(lexer.
+        tokenize(line)))));
     rl.prompt();
 }).on("close", function () {
     console.log(colors.yellow("Bye bye."));
