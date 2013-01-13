@@ -11,7 +11,7 @@ var vows = require("vows"),
     path = require("path");
 
 // Mock up print
-var prints = [],
+var prints,
     print = runtime.global.methods.print;
 runtime.global.methods.print = function (a) {
     prints.push(a);
@@ -23,8 +23,9 @@ function evaluate(file) {
     var code = fs.readFileSync(path.resolve("./test/code", file), "utf8");
 
     return function () {
+        prints = [];
         interpreter.evaluate(parser.parse(lexer.tokenize(code)));
-        return prints
+        return prints;
     };
 }
 
@@ -38,6 +39,32 @@ vows.describe("Interpreter").addBatch({
 
         "'print' is called with 'Hello world'": function (prints) {
             assert.equal(prints[0], "hello world");
+        }
+    },
+
+
+    "If": {
+        topic: evaluate("if.code"),
+
+        "'print' is called once": function (prints) {
+            assert.equal(prints.length, 1);
+        },
+
+        "'print' is called with 'Hello world'": function (prints) {
+            assert.equal(prints[0], "true!");
+        }
+    },
+
+
+    "Function": {
+        topic: evaluate("function.code"),
+
+        "'print' is called once": function (prints) {
+            assert.equal(prints.length, 1);
+        },
+
+        "'print' is called with 'Hello world'": function (prints) {
+            assert.equal(prints[0], 3);
         }
     }
 }).exportTo(module);

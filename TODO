@@ -1,8 +1,6 @@
 - Lexer
 - Parser
 - Interpreter
-    - if.code test
-    - function.code test
 
 Ideas
 
