@@ -19,6 +19,28 @@ scope
 
 syntax
     - integrate event handling system (on/off/trigger)
+    
+    disrupt conventional syntax
+        - allow white space on identifiers
+        - use symbols for reserved words
+        
+        add two numbers (a, b) -> result {
+            a + b
+        }
+        
+        variable -> "lemon"
+        
+        if (variable = "lemon") {
+            print(true)
+        }
+        
+        if (variable = "lemon", {
+        
+        }, {
+        
+        })
+        
+        print(variable)
 
 macros
 
